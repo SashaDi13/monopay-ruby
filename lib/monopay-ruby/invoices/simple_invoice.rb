@@ -1,5 +1,7 @@
+require 'active_support/all'
 require "bigdecimal"
 require "money"
+require "pry"
 
 module MonopayRuby
   module Invoices
@@ -53,12 +55,11 @@ module MonopayRuby
         end
       end
 
-      private
+      protected
 
-      # Request body required for Monobank API
-      #
-      # @return [Hash] request body
-      def request_body
+      # Default params required for request into Monobank
+
+      def default_params
         # TODO: add "ccy" and another missing params
         # TODO: remove nil valued params
         {
@@ -69,7 +70,14 @@ module MonopayRuby
             reference: reference,
             destination: destination
           }
-        }.to_json
+        }
+      end
+
+      # Request body required for Monobank API
+      #
+      # @return [Hash] request body
+      def request_body
+        default_params.to_json
       end
 
       def convert_to_cents(amount)
